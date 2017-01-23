@@ -1,22 +1,70 @@
-html {
-	font-family: sans-serif;
+* {
+	font-family: 'Share Tech Mono', monospace;
 	box-sizing: border-box;
+	color: #999;
+}
+
+h1 {
+	color: #414141;
+}
+
+.container {
+	width: 720px;
+	margin: 0 auto;
+	overflow: auto;
+	background-color: white;
+}
+
+.header {
+
 }
 
 .board {
 	width: 720px;
+	overflow: auto;
+	margin: 0 auto;
+	margin-top: 10px;
+	background-color: #f7f7f7
 }
 
 .cell {
 	width: 12px;
 	height: 12px;
 	float: left;
+	border-radius: 50%;
+	cursor: pointer;
 }
 
 .dead {
-	background-color: black;
+	background-color: transparent;
 }
 
 .alive {
-	background-color: green;
+	background-color: #009cde;
+}
+
+button {
+	background-color: white;
+	border: none;
+	border-bottom: 2px solid #009cde;
+	color: #7b8993;
+	
+	margin: 5px;
+	width: 70px;
+	height: 35px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+button:first-child {
+	margin-left: 0;
+}
+
+button:focus {
+	outline: 0;
+}
+
+button:hover {
+	background-color: #009cde;
+	color: white;
 }

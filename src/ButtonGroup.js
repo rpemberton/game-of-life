@@ -4,10 +4,10 @@ import Button from './Button'
 const ButtonGroup = (props) => {
 	return(
 		<div>
-			<Button onClick={props.onStart} btnTxt="Start"/>
-			<Button onClick={props.onPause} btnTxt="Stop"/>
-			<Button onClick={props.onClear} btnTxt="Clear"/>
-			<Button onClick={props.onReset} btnTxt="Reset"/>
+			<Button onClick={props.onStart} btnTxt="start"/>
+			<Button onClick={props.onPause} btnTxt="stop"/>
+			<Button onClick={props.onClear} btnTxt="clear"/>
+			<Button onClick={props.onReset} btnTxt="random"/>
 		</div>
 	)
 }

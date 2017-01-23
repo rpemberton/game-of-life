@@ -169,18 +169,22 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>Game of Life</h1>
-        <p>Generation: {this.state.generation}</p>
-        <ButtonGroup 
-          onStart={this.handleStart}
-          onPause={this.handlePause}
-          onClear={this.handleClear}
-          onReset={this.handleReset}
-        />
-        <Board 
-          board={this.state.board}
-          onCellClick={this.handleCellClick}
-        />
+        <div className="container">
+          <div className="header">
+            <h1>game of life</h1>
+            <p>generation: {this.state.generation}</p>
+            <ButtonGroup 
+              onStart={this.handleStart}
+              onPause={this.handlePause}
+              onClear={this.handleClear}
+              onReset={this.handleReset}
+            />
+          </div>
+          <Board 
+            board={this.state.board}
+            onCellClick={this.handleCellClick}
+          />
+        </div>
       </div>
     );
   }
