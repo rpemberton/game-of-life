@@ -35,6 +35,10 @@ h1 {
 	cursor: pointer;
 }
 
+.cell:hover {
+	background-color: #009cde;
+}
+
 .dead {
 	background-color: transparent;
 }
