@@ -5,6 +5,7 @@ import './App.css';
 
 //const totalCells = 1980;
 //const rowLength = 60;
+const speed = 50;
 
 class App extends Component {
   constructor() {
@@ -114,7 +115,7 @@ class App extends Component {
     this.setBoard();
     const interval = setInterval(() => {
         this.nextGeneration();
-    }, 100);
+    }, speed);
     this.setState({
       interval: interval
     })
@@ -124,7 +125,7 @@ class App extends Component {
     if (!this.state.gameInPlay) {
       const interval = setInterval(() => {
           this.nextGeneration();
-      }, 100);
+      }, speed);
       this.setState({
         interval: interval,
         gameInPlay: true
