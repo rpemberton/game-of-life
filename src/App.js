@@ -37,7 +37,7 @@ class App extends Component {
   }
 
   calculateNeighbours = (i) => {
-    const board = this.state.board;
+    const board = this.state.board.slice(); 
     let count = 0;
 
     if (i < 60) { // cell is on top edge
