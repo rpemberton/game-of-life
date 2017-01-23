@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ButtonGroup from './ButtonGroup'
 import Board from './Board';
 import './App.css';
@@ -7,7 +7,7 @@ import './App.css';
 //const rowLength = 60;
 const speed = 50;
 
-class App extends Component {
+class App extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -170,20 +170,19 @@ class App extends Component {
     return (
       <div className="App">
         <div className="container">
-          <div className="header">
-            <h1>game of life</h1>
-            <p>generation: {this.state.generation}</p>
-            <ButtonGroup 
-              onStart={this.handleStart}
-              onPause={this.handlePause}
-              onClear={this.handleClear}
-              onReset={this.handleReset}
-            />
-          </div>
+          <h1>game of life</h1>
+          <p className="generation">generation: {this.state.generation}</p>
+          <ButtonGroup 
+            onStart={this.handleStart}
+            onPause={this.handlePause}
+            onClear={this.handleClear}
+            onReset={this.handleReset}
+          />
           <Board 
             board={this.state.board}
             onCellClick={this.handleCellClick}
           />
+          <p className="footer">Learn about Conway's Game of Life on <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">Wikipedia</a></p>
         </div>
       </div>
     );

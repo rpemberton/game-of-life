@@ -15,8 +15,30 @@ h1 {
 	background-color: white;
 }
 
-.header {
+button {
+	background-color: white;
+	border: none;
+	border-bottom: 2px solid #009cde;
+	color: #7b8993;
+	
+	margin: 5px;
+	width: 70px;
+	height: 35px;
+	cursor: pointer;
+	font-weight: bold;
+}
 
+button:first-child {
+	margin-left: 0;
+}
+
+button:focus {
+	outline: 0;
+}
+
+button:hover {
+	background-color: #009cde;
+	color: white;
 }
 
 .board {
@@ -47,28 +69,7 @@ h1 {
 	background-color: #009cde;
 }
 
-button {
-	background-color: white;
-	border: none;
-	border-bottom: 2px solid #009cde;
-	color: #7b8993;
-	
-	margin: 5px;
-	width: 70px;
-	height: 35px;
-	cursor: pointer;
-	font-weight: bold;
-}
-
-button:first-child {
-	margin-left: 0;
-}
-
-button:focus {
-	outline: 0;
-}
-
-button:hover {
-	background-color: #009cde;
-	color: white;
+.footer {
+	font-size: 10px;
+	text-align: right;
 }
