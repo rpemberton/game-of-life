@@ -24,69 +24,46 @@ class Board extends React.Component {
 	calculateNeighbours(i) {
 		const board = this.state.board;
 		let count = 0;
-		/*
-		[i - 61] [i - 60] [i - 59]
-		[i -  1] [ item ] [i +  1]
-		[i + 59] [i + 60] [i + 61]
 
-		if(board[i - 61]){count++}
-		if(board[i - 60]){count++}
-		if(board[i - 59]){count++}
-		if(board[i -  1]){count++}
-		if(board[i +  1]){count++}
-		if(board[i + 59]){count++}
-		if(board[i + 60]){count++}
-		if(board[i + 61]){count++}
-		*/
-
-		// this makes the board infinite
-		if (i < 60) { // if cell is on top row
+		if (i < 60) { // cell is on top edge
+			if(board[i + 1919]){count++}
 			if(board[i + 1920]){count++}
-
-			//if(board[i - 61]){count++}
-			//if(board[i - 60]){count++}
-			//if(board[i - 59]){count++}
-			if(board[i -  1]){count++}
-			if(board[i +  1]){count++}
-			if(board[i + 59]){count++}
-			if(board[i + 60]){count++}
-			if(board[i + 61]){count++}
+			if(board[i + 1921]){count++}
+			if(board[i -    1]){count++}
+			if(board[i +    1]){count++}
+			if(board[i +   59]){count++}
+			if(board[i +   60]){count++}
+			if(board[i +   61]){count++}
 		}
-		else if (i >= 1980 - 60) { // if cell is on bottom row
+		else if (i >= 1980 - 60) { // cell is on bottom edge
+			if(board[i -   61]){count++}
+			if(board[i -   60]){count++}
+			if(board[i -   59]){count++}
+			if(board[i -    1]){count++}
+			if(board[i +    1]){count++}
+			if(board[i - 1921]){count++}
 			if(board[i - 1920]){count++}
-
-			if(board[i - 61]){count++}
-			if(board[i - 60]){count++}
-			if(board[i - 59]){count++}
-			if(board[i -  1]){count++}
-			if(board[i +  1]){count++}
-			//if(board[i + 59]){count++}
-			//if(board[i + 60]){count++}
-			//if(board[i + 61]){count++}
+			if(board[i - 1919]){count++}
 		}
-		else if (i % 60 === 0) { // if cell is on left col
-			if(board[i + 59]){count++}
-
-			//if(board[i - 61]){count++}
-			if(board[i - 60]){count++}
-			if(board[i - 59]){count++}
-			//if(board[i -  1]){count++}
-			if(board[i +  1]){count++}
-			//if(board[i + 59]){count++}
-			if(board[i + 60]){count++}
-			if(board[i + 61]){count++}
+		else if (i % 60 === 0) { // cell is on left edge
+			if(board[i -    1]){count++}
+			if(board[i -   60]){count++}
+			if(board[i -   59]){count++}
+			if(board[i +  119]){count++}
+			if(board[i +    1]){count++}
+			if(board[i +   59]){count++}
+			if(board[i +   60]){count++}
+			if(board[i +   61]){count++}
 		}
-		else if (i % 60 === 59) { // if cell is on right col
-			if(board[i - 59]){count++}
-
-			if(board[i - 61]){count++}
-			if(board[i - 60]){count++}
-			//if(board[i - 59]){count++}
-			if(board[i -  1]){count++}
-			//if(board[i +  1]){count++}
-			if(board[i + 59]){count++}
-			if(board[i + 60]){count++}
-			//if(board[i + 61]){count++}
+		else if (i % 60 === 59) { // cell is on right edge
+			if(board[i -   61]){count++}
+			if(board[i -   60]){count++}
+			if(board[i -  119]){count++}
+			if(board[i -    1]){count++}
+			if(board[i -   59]){count++}
+			if(board[i +   59]){count++}
+			if(board[i +   60]){count++}
+			if(board[i +    1]){count++}
 		}
 		else {
 			if(board[i - 61]){count++}
@@ -106,9 +83,8 @@ class Board extends React.Component {
 		const board = this.state.board.map((item, i) => {
 			const neighbours = this.calculateNeighbours(i);
 
-			if (neighbours === 2 && item === 1) {return 1}
+			if (neighbours === 2) {return item}
 			if (neighbours === 3) {return 1}
-
 			return 0;
 		});
 
