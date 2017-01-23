@@ -4,7 +4,8 @@ const Cell = (props) => (
 	<div 
 		id={props.id}
 		value={props.value}
-		className={"cell " + props.status} 
+		className={"cell " + props.status}
+		onClick={() => props.onCellClick(props.id)}
 	/>
 );
 
