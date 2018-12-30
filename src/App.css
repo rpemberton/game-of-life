@@ -11,16 +11,14 @@ h1 {
 .container {
 	width: 720px;
 	margin: 0 auto;
-	overflow: auto;
-	background-color: white;
 }
 
-button {
+.ctrl-btn {
 	background-color: white;
 	border: none;
 	border-bottom: 2px solid #009cde;
 	color: #7b8993;
-	
+
 	margin: 5px;
 	width: 70px;
 	height: 35px;
@@ -28,7 +26,7 @@ button {
 	font-weight: bold;
 }
 
-button:first-child {
+.ctrl-btn:first-child {
 	margin-left: 0;
 }
 
@@ -42,18 +40,22 @@ button:hover {
 }
 
 .board {
-	width: 720px;
-	overflow: auto;
 	margin: 0 auto;
 	margin-top: 10px;
-	background-color: #f7f7f7
+	background-color: #f7f7f7;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .cell {
 	width: 12px;
 	height: 12px;
-	float: left;
+
 	border-radius: 50%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+
 	cursor: pointer;
 }
 

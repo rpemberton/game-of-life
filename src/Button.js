@@ -2,7 +2,11 @@ import React from 'react';
 
 const Button = (props) => {
 	return(
-		<button onClick={() => props.onClick()}>{props.btnTxt}</button>
+		<button
+			className="ctrl-btn"
+			onClick={() => props.onClick()}>
+			{props.btnTxt}
+		</button>
 	);
 }
 

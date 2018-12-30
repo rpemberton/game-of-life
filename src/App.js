@@ -3,99 +3,93 @@ import ButtonGroup from './ButtonGroup'
 import Board from './Board';
 import './App.css';
 
-//const totalCells = 1980;
-//const rowLength = 60;
-const speed = 50;
-
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      gameInPlay: false,
+      isGameInPlay: false,
       board: [],
       generation: 0,
-      interval: ''
-    }
+      rAF: null
+    };
   }
 
-  handleGenerationUpdate = () => {
-    this.setState({
-      generation: this.state.generation + 1
-    })
-  }
-
-  setBoard = () => {
-    let board = [];
+  resetBoard = () => {
+    const board = [];
     for (let i = 0; i < 1980; i++) {
       board.push(Math.random() > 0.8 ? 1 : 0);
     }
 
     this.setState({
       board: board,
-      generation: 0,
-      gameInPlay: true
+      generation: 0
     });
   }
 
   calculateNeighbours = (i) => {
-    const board = this.state.board.slice(); 
+    const board = this.state.board;
     let count = 0;
 
     if (i < 60) { // cell is on top edge
-      if(board[i + 1919]){count++}
-      if(board[i + 1920]){count++}
-      if(board[i + 1921]){count++}
-      if(board[i -    1]){count++}
-      if(board[i +    1]){count++}
-      if(board[i +   59]){count++}
-      if(board[i +   60]){count++}
-      if(board[i +   61]){count++}
+      if (board[i + 1919]) {count++}
+      if (board[i + 1920]) {count++}
+      if (board[i + 1921]) {count++}
+      if (board[i -    1]) {count++}
+      if (board[i +    1]) {count++}
+      if (board[i +   59]) {count++}
+      if (board[i +   60]) {count++}
+      if (board[i +   61]) {count++}
     }
     else if (i >= 1980 - 60) { // cell is on bottom edge
-      if(board[i -   61]){count++}
-      if(board[i -   60]){count++}
-      if(board[i -   59]){count++}
-      if(board[i -    1]){count++}
-      if(board[i +    1]){count++}
-      if(board[i - 1921]){count++}
-      if(board[i - 1920]){count++}
-      if(board[i - 1919]){count++}
+      if (board[i -   61]) {count++}
+      if (board[i -   60]) {count++}
+      if (board[i -   59]) {count++}
+      if (board[i -    1]) {count++}
+      if (board[i +    1]) {count++}
+      if (board[i - 1921]) {count++}
+      if (board[i - 1920]) {count++}
+      if (board[i - 1919]) {count++}
     }
     else if (i % 60 === 0) { // cell is on left edge
-      if(board[i -    1]){count++}
-      if(board[i -   60]){count++}
-      if(board[i -   59]){count++}
-      if(board[i +  119]){count++}
-      if(board[i +    1]){count++}
-      if(board[i +   59]){count++}
-      if(board[i +   60]){count++}
-      if(board[i +   61]){count++}
+      if (board[i -    1]) {count++}
+      if (board[i -   60]) {count++}
+      if (board[i -   59]) {count++}
+      if (board[i +  119]) {count++}
+      if (board[i +    1]) {count++}
+      if (board[i +   59]) {count++}
+      if (board[i +   60]) {count++}
+      if (board[i +   61]) {count++}
     }
     else if (i % 60 === 59) { // cell is on right edge
-      if(board[i -   61]){count++}
-      if(board[i -   60]){count++}
-      if(board[i -  119]){count++}
-      if(board[i -    1]){count++}
-      if(board[i -   59]){count++}
-      if(board[i +   59]){count++}
-      if(board[i +   60]){count++}
-      if(board[i +    1]){count++}
+      if (board[i -   61]) {count++}
+      if (board[i -   60]) {count++}
+      if (board[i -  119]) {count++}
+      if (board[i -    1]) {count++}
+      if (board[i -   59]) {count++}
+      if (board[i +   59]) {count++}
+      if (board[i +   60]) {count++}
+      if (board[i +    1]) {count++}
     }
     else {
-      if(board[i - 61]){count++}
-      if(board[i - 60]){count++}
-      if(board[i - 59]){count++}
-      if(board[i -  1]){count++}
-      if(board[i +  1]){count++}
-      if(board[i + 59]){count++}
-      if(board[i + 60]){count++}
-      if(board[i + 61]){count++}
+      if (board[i - 61]) {count++}
+      if (board[i - 60]) {count++}
+      if (board[i - 59]) {count++}
+      if (board[i -  1]) {count++}
+      if (board[i +  1]) {count++}
+      if (board[i + 59]) {count++}
+      if (board[i + 60]) {count++}
+      if (board[i + 61]) {count++}
     }
 
     return count;
   }
 
   nextGeneration = () => {
+    if (!this.state.isGameInPlay) {
+      cancelAnimationFrame(this.state.rAF);
+      return;
+    }
+
     const board = this.state.board.map((item, i) => {
       const neighbours = this.calculateNeighbours(i);
 
@@ -106,64 +100,55 @@ class App extends React.Component {
 
     this.setState({
       board: board,
-    })
+      generation: this.state.generation + 1
+    });
 
-    this.handleGenerationUpdate();
+    requestAnimationFrame(this.nextGeneration);
   }
 
   componentDidMount = () => {
-    this.setBoard();
-    const interval = setInterval(() => {
-        this.nextGeneration();
-    }, speed);
-    this.setState({
-      interval: interval
-    })
+    this.resetBoard();
+    this.handleStart();
   }
 
   handleStart = () => {
-    if (!this.state.gameInPlay) {
-      const interval = setInterval(() => {
-          this.nextGeneration();
-      }, speed);
-      this.setState({
-        interval: interval,
-        gameInPlay: true
-      })
+    if (this.state.isGameInPlay) {
+      return;
     }
+    this.setState({
+      rAF: requestAnimationFrame(this.nextGeneration),
+      isGameInPlay: true
+    });
   }
 
   handlePause = () => {
-    clearInterval(this.state.interval);
     this.setState({
-      gameInPlay: false
-    })
+      isGameInPlay: false
+    });
   }
 
   handleClear = () => {
-    clearInterval(this.state.interval);
     this.setState({
       board: Array(1980).fill(0),
       generation: 0,
-      gameInPlay: true
-    })
+      isGameInPlay: false
+    });
   }
 
   handleReset = () => {
-    clearInterval(this.state.interval);
-    this.setBoard();
+    this.resetBoard();
     this.setState({
-      gameInPlay: false
-    })
+      isGameInPlay: false
+    });
   }
 
   handleCellClick = (i) => {
-    const board = this.state.board.slice();
-    board[i] = 1;
+    const board = this.state.board.map((cell, cellIndex) => {
+      return cellIndex === 1 ? 1 : cell;
+    });
     this.setState({
-      board: board,
-      gameInPlay: false
-    })
+      board: board
+    });
   }
 
   render() {
@@ -172,13 +157,13 @@ class App extends React.Component {
         <div className="container">
           <h1>game of life</h1>
           <p className="generation">generation: {this.state.generation}</p>
-          <ButtonGroup 
+          <ButtonGroup
             onStart={this.handleStart}
             onPause={this.handlePause}
             onClear={this.handleClear}
             onReset={this.handleReset}
           />
-          <Board 
+          <Board
             board={this.state.board}
             onCellClick={this.handleCellClick}
           />
