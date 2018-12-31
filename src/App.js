@@ -13,7 +13,7 @@ class App extends Component {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.setBoard();
     this.handleStart();
   }
@@ -212,19 +212,22 @@ class App extends Component {
         <div className="container">
           <h1>Game of Life</h1>
           <p className="generation">Generation: {this.state.generation}</p>
+
           <div>
             {
               this.state.rAF
-                ? <Button onClick={this.handlePause} btnTxt="Pause"/>
-                : <Button onClick={this.handleStart} btnTxt="Start"/>
+                ? <Button onClick={this.handlePause} text="Pause"/>
+                : <Button onClick={this.handleStart} text={this.state.generation ? 'Resume' : 'Start'}/>
             }
-            <Button onClick={this.handleClear} btnTxt="Clear"/>
-            <Button onClick={this.handleReset} btnTxt="Reset"/>
+            <Button onClick={this.handleClear} text="Clear"/>
+            <Button onClick={this.handleReset} text="Reset"/>
           </div>
+
           <Board
             board={this.state.board}
             onCellClick={this.handleCellClick}
           />
+
           <footer className="footer">
             <p>Learn about Conway's Game of Life on <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">Wikipedia</a>.</p>
           </footer>
