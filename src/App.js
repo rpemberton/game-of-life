@@ -35,103 +35,64 @@ class App extends Component {
     const board = this.state.board;
     let count = 0;
 
-    //  cell is top left corner
-    if (i === 0) {
-      if (board[i +    1]) {count++}
-      if (board[i +   59]) {count++}
-      if (board[i +   60]) {count++}
-      if (board[i +   61]) {count++}
-      if (board[i +  119]) {count++}
-      if (board[i + 1920]) {count++}
-      if (board[i + 1921]) {count++}
-      if (board[i + 1979]) {count++}
+    let currRowIndex = Math.floor(i / 60);
+    let prevRowIndex = currRowIndex - 1;
+    let nextRowIndex = currRowIndex + 1;
+
+    if (prevRowIndex === -1) {
+      prevRowIndex = 32;
     }
-    //  cell is top right corner
-    else if (i === 59) {
-      if (board[i -    1]) {count++}
-      if (board[i +    1]) {count++}
-      if (board[i -   59]) {count++}
-      if (board[i +   59]) {count++}
-      if (board[i +   60]) {count++}
-      if (board[i + 1861]) {count++}
-      if (board[i + 1919]) {count++}
-      if (board[i + 1920]) {count++}
+
+    if (nextRowIndex === 33) {
+      nextRowIndex = 0;
     }
-    //  cell is bottom left corner
-    else if (i === 1920) {
-      if (board[i +    1]) {count++}
-      if (board[i -    1]) {count++}
-      if (board[i +   59]) {count++}
-      if (board[i -   59]) {count++}
-      if (board[i -   60]) {count++}
-      if (board[i - 1861]) {count++}
-      if (board[i - 1919]) {count++}
-      if (board[i - 1920]) {count++}
+
+    const prevRow = board.slice(prevRowIndex * 60, (prevRowIndex * 60) + 60);
+    const currRow = board.slice(currRowIndex * 60, (currRowIndex * 60) + 60);
+    const nextRow = board.slice(nextRowIndex * 60, (nextRowIndex * 60) + 60);
+
+    const isLeftSide = i % 60 === 0;
+    const isRightSide = i % 60 === 59;
+
+    let leftIndex = (i % 60) - 1;
+    let rightIndex = (i % 60) + 1;
+
+    if (isLeftSide) {
+      leftIndex = 59;
     }
-    //  cell is bottom right corner
-    else if (i === 1979) {
-      if (board[i -    1]) {count++}
-      if (board[i -   59]) {count++}
-      if (board[i -   60]) {count++}
-      if (board[i -   61]) {count++}
-      if (board[i -  119]) {count++}
-      if (board[i - 1920]) {count++}
-      if (board[i - 1921]) {count++}
-      if (board[i - 1979]) {count++}
+
+    if (isRightSide) {
+      rightIndex = 0;
     }
-    // cell is on top edge
-    else if (i < 60) {
-      if (board[i + 1919]) {count++}
-      if (board[i + 1920]) {count++}
-      if (board[i + 1921]) {count++}
-      if (board[i -    1]) {count++}
-      if (board[i +    1]) {count++}
-      if (board[i +   59]) {count++}
-      if (board[i +   60]) {count++}
-      if (board[i +   61]) {count++}
+
+    // count left side
+    if (prevRow[leftIndex]) {
+      count++;
     }
-    // cell is on bottom edge
-    else if (i >= 1979 - 59) {
-      if (board[i -   61]) {count++}
-      if (board[i -   60]) {count++}
-      if (board[i -   59]) {count++}
-      if (board[i -    1]) {count++}
-      if (board[i +    1]) {count++}
-      if (board[i - 1921]) {count++}
-      if (board[i - 1920]) {count++}
-      if (board[i - 1919]) {count++}
+    if (currRow[leftIndex]) {
+      count++;
     }
-    // cell is on left edge
-    else if (i % 60 === 0) {
-      if (board[i -    1]) {count++}
-      if (board[i -   60]) {count++}
-      if (board[i -   59]) {count++}
-      if (board[i +  119]) {count++}
-      if (board[i +    1]) {count++}
-      if (board[i +   59]) {count++}
-      if (board[i +   60]) {count++}
-      if (board[i +   61]) {count++}
+    if (nextRow[leftIndex]) {
+      count++;
     }
-    // cell is on right edge
-    else if (i % 60 === 59) {
-      if (board[i -   61]) {count++}
-      if (board[i -   60]) {count++}
-      if (board[i -  119]) {count++}
-      if (board[i -    1]) {count++}
-      if (board[i -   59]) {count++}
-      if (board[i +   59]) {count++}
-      if (board[i +   60]) {count++}
-      if (board[i +    1]) {count++}
+
+    // count right side
+    if (prevRow[rightIndex]) {
+      count++;
     }
-    else {
-      if (board[i - 61]) {count++}
-      if (board[i - 60]) {count++}
-      if (board[i - 59]) {count++}
-      if (board[i -  1]) {count++}
-      if (board[i +  1]) {count++}
-      if (board[i + 59]) {count++}
-      if (board[i + 60]) {count++}
-      if (board[i + 61]) {count++}
+    if (currRow[rightIndex]) {
+      count++;
+    }
+    if (nextRow[rightIndex]) {
+      count++;
+    }
+
+    // count remaining top and bottom
+    if (prevRow[i % 60]) {
+      count++;
+    }
+    if (nextRow[i % 60]) {
+      count++;
     }
 
     return count;
