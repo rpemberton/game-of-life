@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Button = (props) => {
+const Button = ({ btnTxt, onClick }) => {
 	return(
 		<button
 			className="ctrl-btn"
-			onClick={() => props.onClick()}>
-			{props.btnTxt}
+			onClick={onClick}>
+			{btnTxt}
 		</button>
 	);
 }

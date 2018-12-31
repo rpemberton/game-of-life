@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Cell = (props) => {
+const Cell = ({isAlive, onClick}) => {
 	return (
 		<button
-			className={"cell" + (props.isAlive ? " cell--alive" : "")}
-			onClick={props.handleCellClick}>
+			className={"cell" + (isAlive ? " cell--alive" : "")}
+			onClick={onClick}>
 			<div></div>
 		</button>
 	)

@@ -1,13 +1,13 @@
 import React from 'react';
 import Cell from './Cell';
 
-const Board = (props) => {
-	const cells = props.board.map((item, i) => {
+const Board = ({ board, onCellClick }) => {
+	const cells = board.map((item, i) => {
 		return(
 			<Cell
 				key={i}
 				isAlive={item}
-				handleCellClick={() => props.handleCellClick(i)}
+				onClick={() => onCellClick(i)}
 			/>
 		);
 	});

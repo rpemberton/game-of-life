@@ -9,18 +9,18 @@ class App extends Component {
     this.state = {
       board: [],
       generation: 0,
-      isGameInPlay: false,
       rAF: null
     };
   }
 
   componentDidMount = () => {
-    this.resetBoard();
+    this.setBoard();
     this.handleStart();
   }
 
-  resetBoard = () => {
+  setBoard() {
     const board = [];
+
     for (let i = 0; i < 1980; i++) {
       board.push(Math.random() > 0.8 ? 1 : 0);
     }
@@ -31,11 +31,12 @@ class App extends Component {
     });
   }
 
-  calculateNeighbours = (i) => {
+  calculateNeighbours(i) {
     const board = this.state.board;
     let count = 0;
 
-    if (i === 0) { //  cell is top left corner
+    //  cell is top left corner
+    if (i === 0) {
       if (board[i +    1]) {count++}
       if (board[i +   59]) {count++}
       if (board[i +   60]) {count++}
@@ -45,7 +46,8 @@ class App extends Component {
       if (board[i + 1921]) {count++}
       if (board[i + 1979]) {count++}
     }
-    else if (i === 59) { //  cell is top right corner
+    //  cell is top right corner
+    else if (i === 59) {
       if (board[i -    1]) {count++}
       if (board[i +    1]) {count++}
       if (board[i -   59]) {count++}
@@ -55,7 +57,8 @@ class App extends Component {
       if (board[i + 1919]) {count++}
       if (board[i + 1920]) {count++}
     }
-    else if (i === 1920) { //  cell is bottom left corner
+    //  cell is bottom left corner
+    else if (i === 1920) {
       if (board[i +    1]) {count++}
       if (board[i -    1]) {count++}
       if (board[i +   59]) {count++}
@@ -65,7 +68,8 @@ class App extends Component {
       if (board[i - 1919]) {count++}
       if (board[i - 1920]) {count++}
     }
-    else if (i === 1979) { //  cell is bottom right corner
+    //  cell is bottom right corner
+    else if (i === 1979) {
       if (board[i -    1]) {count++}
       if (board[i -   59]) {count++}
       if (board[i -   60]) {count++}
@@ -75,7 +79,8 @@ class App extends Component {
       if (board[i - 1921]) {count++}
       if (board[i - 1979]) {count++}
     }
-    else if (i < 60) { // cell is on top edge
+    // cell is on top edge
+    else if (i < 60) {
       if (board[i + 1919]) {count++}
       if (board[i + 1920]) {count++}
       if (board[i + 1921]) {count++}
@@ -85,7 +90,8 @@ class App extends Component {
       if (board[i +   60]) {count++}
       if (board[i +   61]) {count++}
     }
-    else if (i >= 1979 - 59) { // cell is on bottom edge
+    // cell is on bottom edge
+    else if (i >= 1979 - 59) {
       if (board[i -   61]) {count++}
       if (board[i -   60]) {count++}
       if (board[i -   59]) {count++}
@@ -95,7 +101,8 @@ class App extends Component {
       if (board[i - 1920]) {count++}
       if (board[i - 1919]) {count++}
     }
-    else if (i % 60 === 0) { // cell is on left edge
+    // cell is on left edge
+    else if (i % 60 === 0) {
       if (board[i -    1]) {count++}
       if (board[i -   60]) {count++}
       if (board[i -   59]) {count++}
@@ -105,7 +112,8 @@ class App extends Component {
       if (board[i +   60]) {count++}
       if (board[i +   61]) {count++}
     }
-    else if (i % 60 === 59) { // cell is on right edge
+    // cell is on right edge
+    else if (i % 60 === 59) {
       if (board[i -   61]) {count++}
       if (board[i -   60]) {count++}
       if (board[i -  119]) {count++}
@@ -130,16 +138,18 @@ class App extends Component {
   }
 
   nextGeneration = () => {
-    if (!this.state.isGameInPlay) {
-      cancelAnimationFrame(this.state.rAF);
+    if (!this.state.rAF) {
       return;
     }
 
     const board = this.state.board.map((item, i) => {
       const neighbours = this.calculateNeighbours(i);
-
-      if (neighbours === 2) {return item}
-      if (neighbours === 3) {return 1}
+      if (neighbours === 2) {
+        return item
+      }
+      if (neighbours === 3) {
+        return 1
+      }
       return 0;
     });
 
@@ -152,40 +162,38 @@ class App extends Component {
   }
 
   handleStart = () => {
-    if (this.state.isGameInPlay) {
+    if (this.state.rAF) {
       return;
     }
 
     const isBoardPopulated = this.state.board.includes(1);
 
     if (!isBoardPopulated) {
-      this.resetBoard();
+      this.setBoard();
     }
 
-    this.setState(() => ({
+    this.setState({
       rAF: requestAnimationFrame(this.nextGeneration),
-      isGameInPlay: true
-    }));
+    });
   }
 
   handlePause = () => {
+    cancelAnimationFrame(this.state.rAF);
     this.setState({
-      isGameInPlay: false
+      rAF: null
     });
+  }
+
+  handleReset = () => {
+    this.handlePause();
+    this.setBoard();
   }
 
   handleClear = () => {
     this.setState({
       board: Array(1980).fill(0),
       generation: 0,
-      isGameInPlay: false
-    });
-  }
-
-  handleReset = () => {
-    this.resetBoard();
-    this.setState({
-      isGameInPlay: false
+      rAF: null,
     });
   }
 
@@ -193,30 +201,34 @@ class App extends Component {
     const updatedBoard = this.state.board.slice();
     updatedBoard[i] = updatedBoard[i] ? 0 : 1;
 
-    this.setState(() => ({
+    this.setState({
       board: updatedBoard
-    }));
+    });
   }
 
   render() {
     return (
       <div className="App">
-        <h1>Game of life</h1>
-        <p className="generation">Generation: {this.state.generation}</p>
-        {
-          this.state.isGameInPlay
-            ? <Button onClick={this.handlePause} btnTxt="Pause"/>
-            : <Button onClick={this.handleStart} btnTxt="Start"/>
-        }
-        <Button onClick={this.handleClear} btnTxt="Clear"/>
-        <Button onClick={this.handleReset} btnTxt="Reset"/>
-        <Board
-          board={this.state.board}
-          handleCellClick={this.handleCellClick}
-        />
-        <footer className="footer">
-          <p>Learn about Conway's Game of Life on <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">Wikipedia</a></p>
-        </footer>
+        <div className="container">
+          <h1>Game of Life</h1>
+          <p className="generation">Generation: {this.state.generation}</p>
+          <div>
+            {
+              this.state.rAF
+                ? <Button onClick={this.handlePause} btnTxt="Pause"/>
+                : <Button onClick={this.handleStart} btnTxt="Start"/>
+            }
+            <Button onClick={this.handleClear} btnTxt="Clear"/>
+            <Button onClick={this.handleReset} btnTxt="Reset"/>
+          </div>
+          <Board
+            board={this.state.board}
+            onCellClick={this.handleCellClick}
+          />
+          <footer className="footer">
+            <p>Learn about Conway's Game of Life on <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">Wikipedia</a>.</p>
+          </footer>
+        </div>
       </div>
     );
   }
