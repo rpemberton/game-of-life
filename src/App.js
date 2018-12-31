@@ -205,7 +205,7 @@ class App extends Component {
         <p className="generation">Generation: {this.state.generation}</p>
         {
           this.state.isGameInPlay
-            ? <Button onClick={this.handlePause} btnTxt="Stop"/>
+            ? <Button onClick={this.handlePause} btnTxt="Pause"/>
             : <Button onClick={this.handleStart} btnTxt="Start"/>
         }
         <Button onClick={this.handleClear} btnTxt="Clear"/>
