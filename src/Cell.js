@@ -1,12 +1,13 @@
 import React from 'react';
 
-const Cell = (props) => (
-	<button
-		id={props.id}
-		value={props.value}
-		className={"cell " + props.status}
-		onClick={() => props.onCellClick(props.id)}>
-	</button>
-);
+const Cell = (props) => {
+	return (
+		<button
+			className={"cell" + (props.isAlive ? " cell--alive" : "")}
+			onClick={props.handleCellClick}>
+			<div></div>
+		</button>
+	)
+};
 
 export default Cell;

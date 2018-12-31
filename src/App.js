@@ -1,17 +1,22 @@
-import React from 'react';
-import ButtonGroup from './ButtonGroup'
+import React, { Component } from 'react';
 import Board from './Board';
+import Button from './Button';
 import './App.css';
 
-class App extends React.Component {
-  constructor() {
-    super();
+class App extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      isGameInPlay: false,
       board: [],
       generation: 0,
+      isGameInPlay: false,
       rAF: null
     };
+  }
+
+  componentDidMount = () => {
+    this.resetBoard();
+    this.handleStart();
   }
 
   resetBoard = () => {
@@ -98,27 +103,29 @@ class App extends React.Component {
       return 0;
     });
 
-    this.setState({
+    this.setState((state) => ({
       board: board,
-      generation: this.state.generation + 1
-    });
+      generation: state.generation + 1
+    }));
 
     requestAnimationFrame(this.nextGeneration);
-  }
-
-  componentDidMount = () => {
-    this.resetBoard();
-    this.handleStart();
   }
 
   handleStart = () => {
     if (this.state.isGameInPlay) {
       return;
     }
-    this.setState({
+
+    const isBoardPopulated = this.state.board.includes(1);
+
+    if (!isBoardPopulated) {
+      this.resetBoard();
+    }
+
+    this.setState(() => ({
       rAF: requestAnimationFrame(this.nextGeneration),
       isGameInPlay: true
-    });
+    }));
   }
 
   handlePause = () => {
@@ -143,52 +150,36 @@ class App extends React.Component {
   }
 
   handleCellClick = (i) => {
-    const board = this.state.board.map((cell, cellIndex) => {
-      return cellIndex === 1 ? 1 : cell;
-    });
-    this.setState({
-      board: board
-    });
+    const updatedBoard = this.state.board.slice();
+    updatedBoard[i] = updatedBoard[i] ? 0 : 1;
+
+    this.setState(() => ({
+      board: updatedBoard
+    }));
   }
 
   render() {
     return (
       <div className="App">
-        <div className="container">
-          <h1>game of life</h1>
-          <p className="generation">generation: {this.state.generation}</p>
-          <ButtonGroup
-            onStart={this.handleStart}
-            onPause={this.handlePause}
-            onClear={this.handleClear}
-            onReset={this.handleReset}
-          />
-          <Board
-            board={this.state.board}
-            onCellClick={this.handleCellClick}
-          />
-          <p className="footer">Learn about Conway's Game of Life on <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">Wikipedia</a></p>
-        </div>
+        <h1>Game of life</h1>
+        <p className="generation">Generation: {this.state.generation}</p>
+        {
+          this.state.isGameInPlay
+            ? <Button onClick={this.handlePause} btnTxt="Stop"/>
+            : <Button onClick={this.handleStart} btnTxt="Start"/>
+        }
+        <Button onClick={this.handleClear} btnTxt="Clear"/>
+        <Button onClick={this.handleReset} btnTxt="Reset"/>
+        <Board
+          board={this.state.board}
+          handleCellClick={this.handleCellClick}
+        />
+        <footer className="footer">
+          <p>Learn about Conway's Game of Life on <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">Wikipedia</a></p>
+        </footer>
       </div>
     );
   }
 }
 
 export default App;
-
-/*
-COMPONENT HIERARCHY
-===================
--App
-  -ButtonGroup
-    -Button
-  -Board
-    -Cell
-
-User Story: When I first arrive at the game, it will randomly generate a board and start playing.
-User Story: I can start and stop the board.
-User Story: I can set up the board.
-User Story: I can clear the board.
-User Story: When I press start, the game will play out.
-User Story: Each time the board changes, I can see how many generations have gone by.
-*/

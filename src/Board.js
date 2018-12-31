@@ -3,17 +3,15 @@ import Cell from './Cell';
 
 const Board = (props) => {
 	const cells = props.board.map((item, i) => {
-		const alive = item === 1 ? "alive" : "dead";
 		return(
-			<Cell 
-				id={i}
-				key={'c' + i}
-				value={item}
-				status={alive}
-				onCellClick={props.onCellClick}
+			<Cell
+				key={i}
+				isAlive={item}
+				handleCellClick={() => props.handleCellClick(i)}
 			/>
 		);
 	});
+
 	return(
 		<div className="board">
 			{cells}
