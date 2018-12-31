@@ -11,6 +11,8 @@ class App extends Component {
       generation: 0,
       rAF: null
     };
+
+    this.numCellsBoard = 1980;
   }
 
   componentDidMount() {
@@ -21,7 +23,7 @@ class App extends Component {
   setBoard() {
     const board = [];
 
-    for (let i = 0; i < 1980; i++) {
+    for (let i = 0; i < this.numCellsBoard; i++) {
       board.push(Math.random() > 0.8 ? 1 : 0);
     }
 
@@ -32,40 +34,53 @@ class App extends Component {
   }
 
   calculateNeighbours(i) {
-    const board = this.state.board;
+    const numCellsRow = 60;
+    const numRows = this.numCellsBoard / numCellsRow;
+    const { board } = this.state;
+
     let count = 0;
 
-    let currRowIndex = Math.floor(i / 60);
+    let currRowIndex = Math.floor(i / numCellsRow);
     let prevRowIndex = currRowIndex - 1;
     let nextRowIndex = currRowIndex + 1;
 
-    if (prevRowIndex === -1) {
-      prevRowIndex = 32;
+    if (prevRowIndex < 0) {
+      prevRowIndex = numRows - 1;
     }
 
-    if (nextRowIndex === 33) {
+    if (nextRowIndex === numRows) {
       nextRowIndex = 0;
     }
 
-    const prevRow = board.slice(prevRowIndex * 60, (prevRowIndex * 60) + 60);
-    const currRow = board.slice(currRowIndex * 60, (currRowIndex * 60) + 60);
-    const nextRow = board.slice(nextRowIndex * 60, (nextRowIndex * 60) + 60);
+    function getRow(rowIndex) {
+      return board.slice(rowIndex * numCellsRow, (rowIndex * numCellsRow) + numCellsRow);
+    }
 
-    const isLeftSide = i % 60 === 0;
-    const isRightSide = i % 60 === 59;
+    const prevRow = getRow(prevRowIndex);
+    const currRow = getRow(currRowIndex);
+    const nextRow = getRow(nextRowIndex);
 
-    let leftIndex = (i % 60) - 1;
-    let rightIndex = (i % 60) + 1;
+    const isLeftSide = i % numCellsRow === 0;
+    const isRightSide = i % numCellsRow === numCellsRow - 1;
+
+    let leftIndex = (i % numCellsRow) - 1;
+    let rightIndex = (i % numCellsRow) + 1;
 
     if (isLeftSide) {
-      leftIndex = 59;
+      leftIndex = numCellsRow - 1;
     }
 
     if (isRightSide) {
       rightIndex = 0;
     }
 
-    // count left side
+    /*
+    L, T, R
+    L, X, R
+    L, B, R
+    */
+
+    // Count left (L) side
     if (prevRow[leftIndex]) {
       count++;
     }
@@ -76,7 +91,7 @@ class App extends Component {
       count++;
     }
 
-    // count right side
+    // Count right (R) side
     if (prevRow[rightIndex]) {
       count++;
     }
@@ -87,11 +102,11 @@ class App extends Component {
       count++;
     }
 
-    // count remaining top and bottom
-    if (prevRow[i % 60]) {
+    // Count remaining top (T) and bottom (B)
+    if (prevRow[i % numCellsRow]) {
       count++;
     }
-    if (nextRow[i % 60]) {
+    if (nextRow[i % numCellsRow]) {
       count++;
     }
 
@@ -106,10 +121,10 @@ class App extends Component {
     const board = this.state.board.map((item, i) => {
       const neighbours = this.calculateNeighbours(i);
       if (neighbours === 2) {
-        return item
+        return item;
       }
       if (neighbours === 3) {
-        return 1
+        return 1;
       }
       return 0;
     });
