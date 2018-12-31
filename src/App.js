@@ -35,7 +35,47 @@ class App extends Component {
     const board = this.state.board;
     let count = 0;
 
-    if (i < 60) { // cell is on top edge
+    if (i === 0) { //  cell is top left corner
+      if (board[i +    1]) {count++}
+      if (board[i +   59]) {count++}
+      if (board[i +   60]) {count++}
+      if (board[i +   61]) {count++}
+      if (board[i +  119]) {count++}
+      if (board[i + 1920]) {count++}
+      if (board[i + 1921]) {count++}
+      if (board[i + 1979]) {count++}
+    }
+    else if (i === 59) { //  cell is top right corner
+      if (board[i -    1]) {count++}
+      if (board[i +    1]) {count++}
+      if (board[i -   59]) {count++}
+      if (board[i +   59]) {count++}
+      if (board[i +   60]) {count++}
+      if (board[i + 1861]) {count++}
+      if (board[i + 1919]) {count++}
+      if (board[i + 1920]) {count++}
+    }
+    else if (i === 1920) { //  cell is bottom left corner
+      if (board[i +    1]) {count++}
+      if (board[i -    1]) {count++}
+      if (board[i +   59]) {count++}
+      if (board[i -   59]) {count++}
+      if (board[i -   60]) {count++}
+      if (board[i - 1861]) {count++}
+      if (board[i - 1919]) {count++}
+      if (board[i - 1920]) {count++}
+    }
+    else if (i === 1979) { //  cell is bottom right corner
+      if (board[i -    1]) {count++}
+      if (board[i -   59]) {count++}
+      if (board[i -   60]) {count++}
+      if (board[i -   61]) {count++}
+      if (board[i -  119]) {count++}
+      if (board[i - 1920]) {count++}
+      if (board[i - 1921]) {count++}
+      if (board[i - 1979]) {count++}
+    }
+    else if (i < 60) { // cell is on top edge
       if (board[i + 1919]) {count++}
       if (board[i + 1920]) {count++}
       if (board[i + 1921]) {count++}
@@ -45,7 +85,7 @@ class App extends Component {
       if (board[i +   60]) {count++}
       if (board[i +   61]) {count++}
     }
-    else if (i >= 1980 - 60) { // cell is on bottom edge
+    else if (i >= 1979 - 59) { // cell is on bottom edge
       if (board[i -   61]) {count++}
       if (board[i -   60]) {count++}
       if (board[i -   59]) {count++}
