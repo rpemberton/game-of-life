@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/game-of-life/static/css/main.72917e78.chunk.css"
   },
   {
-    "revision": "f821c722515705974c546efef66c07a8",
+    "revision": "bf81bf8a27d9985d4d597b5ae6b66795",
     "url": "/game-of-life/index.html"
   }
 ];
