@@ -5,7 +5,6 @@ const Cell = ({isAlive, onClick}) => (
 	<button
 		className={[styles.cell, isAlive && styles['cell--alive']].join(' ')}
 		onClick={onClick}>
-		<div></div>
 	</button>
 );
 
