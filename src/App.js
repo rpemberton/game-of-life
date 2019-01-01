@@ -124,7 +124,7 @@ class App extends Component {
           />
 
           <footer className="footer">
-            <p>Learn about Conway's Game of Life on <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Wikipedia</a>.</p>
+            <p>Learn about Conway&#39;s Game of Life on <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Wikipedia</a>.</p>
           </footer>
         </div>
       </div>
