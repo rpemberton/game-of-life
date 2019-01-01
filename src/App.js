@@ -60,9 +60,7 @@ class App extends Component {
       return;
     }
 
-    const isBoardPopulated = this.state.board.includes(1);
-
-    if (!isBoardPopulated) {
+    if (!this.state.board.includes(1)) {
       this.setBoard();
     }
 
@@ -126,7 +124,7 @@ class App extends Component {
           />
 
           <footer className="footer">
-            <p>Learn about Conway's Game of Life on <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">Wikipedia</a>.</p>
+            <p>Learn about Conway's Game of Life on <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Wikipedia</a>.</p>
           </footer>
         </div>
       </div>
