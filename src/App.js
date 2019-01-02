@@ -12,7 +12,8 @@ class App extends Component {
       rAF: null
     };
 
-    this.numCellsBoard = 1980;
+    this.numCellsInRow = 60;
+    this.numRows = 33;
   }
 
   componentDidMount() {
@@ -33,9 +34,12 @@ class App extends Component {
 
     const board = [];
 
-    for (let i = 0; i < this.numCellsBoard; i++) {
-      const cell = Math.random() > 0.8 ? 1 : 0;
-      board.push(cell);
+    for (let i = 0; i < this.numRows; i++) {
+      const row = [];
+      for (let j = 0; j < this.numCellsInRow; j++) {
+        row.push(Math.random() > 0.8 ? 1 : 0);
+      }
+      board.push(row);
     }
 
     this.setState({
@@ -50,16 +54,7 @@ class App extends Component {
     }
 
     this.setState((prevState) => ({
-      board: prevState.board.map((item, i) => {
-        const neighbourCount = getNeighbourCount(prevState.board, i);
-        if (neighbourCount === 2) {
-          return item;
-        }
-        if (neighbourCount === 3) {
-          return 1;
-        }
-        return 0;
-      }),
+      board: getUpdatedBoard(prevState.board),
       generation: prevState.generation + 1
     }), this.drawGeneration);
 
@@ -70,17 +65,19 @@ class App extends Component {
     const canvas = this.canvas;
     const ctx = canvas.getContext('2d');
 
-    this.state.board.forEach((cell, i) => {
-      const x = Math.floor(i * 12) % 720;
-      const y = Math.floor(i / 60) * 12;
+    this.state.board.forEach((row, rowIndex) => {
+      row.forEach((cell, cellIndex) => {
+        const x = Math.floor(cellIndex * 12);
+        const y = Math.floor(rowIndex * 12);
 
-      if (cell) {
-        ctx.fillStyle = '#009cde';
-        ctx.fillRect(x, y, 12, 12);
-      } else {
-        ctx.fillStyle = '#f7f7f7';
-        ctx.fillRect(x, y, 12, 12);
-      }
+        if (cell) {
+          ctx.fillStyle = '#009cde';
+          ctx.fillRect(x, y, 12, 12);
+        } else {
+          ctx.fillStyle = '#f7f7f7';
+          ctx.fillRect(x, y, 12, 12);
+        }
+      });
     });
   }
 
@@ -89,7 +86,8 @@ class App extends Component {
       return;
     }
 
-    if (!this.state.board.includes(1)) {
+    // Populate board if no cells alive
+    if (!this.state.board.some(row => row.includes(1))) {
       this.setBoard();
     }
 
@@ -167,73 +165,62 @@ class App extends Component {
 export default App;
 
 
-function getNeighbourCount(board, i) {
-  const numCellsRow = 60;
-  const numRows = board.length / numCellsRow;
+function getUpdatedBoard(board) {
+  return board.map((row, rowIndex) => {
+    const prevRow = board[rowIndex - 1] || board[board.length - 1];
+    const nextRow = board[rowIndex + 1] || board[0];
 
-  let count = 0;
+    return row.map((cell, cellIndex) => {
+      let count = 0;
 
-  let currRowIndex = Math.floor(i / numCellsRow);
-  let prevRowIndex = (currRowIndex - 1 + numRows) % numRows;
-  let nextRowIndex = (currRowIndex + 1 + numRows) % numRows;
+      let leftIndex = cellIndex - 1;
+      let rightIndex = cellIndex + 1;
 
-  function getRow(rowIndex) {
-    return board.slice(rowIndex * numCellsRow, (rowIndex * numCellsRow) + numCellsRow);
-  }
+      if (leftIndex < 0) {
+        leftIndex = row.length - 1;
+      }
 
-  const prevRow = getRow(prevRowIndex);
-  const currRow = getRow(currRowIndex);
-  const nextRow = getRow(nextRowIndex);
+      if (rightIndex > row.length - 1) {
+        rightIndex = 0;
+      }
 
-  const isLeftSide = i % numCellsRow === 0;
-  const isRightSide = i % numCellsRow === numCellsRow - 1;
+      // Count left (L) side
+      if (prevRow[leftIndex]) {
+        count++;
+      }
+      if (row[leftIndex]) {
+        count++;
+      }
+      if (nextRow[leftIndex]) {
+        count++;
+      }
 
-  let leftIndex = (i % numCellsRow) - 1;
-  let rightIndex = (i % numCellsRow) + 1; // (i + 1) % 60 + Math.floor(i - i % 60)
+      // Count right (R) side
+      if (prevRow[rightIndex]) {
+        count++;
+      }
+      if (row[rightIndex]) {
+        count++;
+      }
+      if (nextRow[rightIndex]) {
+        count++;
+      }
 
-  if (isLeftSide) {
-    leftIndex = numCellsRow - 1;
-  }
+      // Count remaining top (T) and bottom (B)
+      if (prevRow[cellIndex]) {
+        count++;
+      }
+      if (nextRow[cellIndex]) {
+        count++;
+      }
 
-  if (isRightSide) {
-    rightIndex = 0;
-  }
-
-  /*
-  L, T, R
-  L, X, R
-  L, B, R
-  */
-
-  // Count left (L) side
-  if (prevRow[leftIndex]) {
-    count++;
-  }
-  if (currRow[leftIndex]) {
-    count++;
-  }
-  if (nextRow[leftIndex]) {
-    count++;
-  }
-
-  // Count right (R) side
-  if (prevRow[rightIndex]) {
-    count++;
-  }
-  if (currRow[rightIndex]) {
-    count++;
-  }
-  if (nextRow[rightIndex]) {
-    count++;
-  }
-
-  // Count remaining top (T) and bottom (B)
-  if (prevRow[i % numCellsRow]) {
-    count++;
-  }
-  if (nextRow[i % numCellsRow]) {
-    count++;
-  }
-
-  return count;
+      if (count === 2) {
+        return cell;
+      }
+      if (count === 3) {
+        return 1;
+      }
+      return 0;
+    });
+  });
 }
