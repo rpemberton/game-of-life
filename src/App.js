@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-// import Board from './components/Board/Board';
-import Button from './components/Button/Button';
+import Button from './components/Button';
 import './App.css';
 
 class App extends Component {
@@ -28,8 +27,8 @@ class App extends Component {
     // Make canvas look good on retina displays
     canvas.width = 1440;
     canvas.height = 792;
-    canvas.style.width = "720px";
-    canvas.style.height = "396px";
+    canvas.style.width = '720px';
+    canvas.style.height = '396px';
     canvas.getContext('2d').scale(2,2);
 
     const board = [];
@@ -109,7 +108,7 @@ class App extends Component {
       board: Array(33).fill(Array(60).fill(0)),
       generation: 0,
       rAF: null,
-    });
+    }, this.drawGeneration);
     this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
