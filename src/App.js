@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Board from './components/Board/Board';
+// import Board from './components/Board/Board';
 import Button from './components/Button/Button';
 import './App.css';
 
@@ -21,16 +21,27 @@ class App extends Component {
   }
 
   setBoard() {
+    const canvas = this.refs.canvas;
+    this.canvas = canvas;
+
+    // Make canvas look good on retina displays
+    canvas.width = 1440;
+    canvas.height = 792;
+    canvas.style.width = "720px";
+    canvas.style.height = "396px";
+    canvas.getContext('2d').scale(2,2);
+
     const board = [];
 
     for (let i = 0; i < this.numCellsBoard; i++) {
-      board.push(Math.random() > 0.8 ? 1 : 0);
+      const cell = Math.random() > 0.8 ? 1 : 0;
+      board.push(cell);
     }
 
     this.setState({
       board: board,
       generation: 0
-    });
+    }, this.drawGeneration);
   }
 
   setNextGeneration = () => {
@@ -50,9 +61,27 @@ class App extends Component {
         return 0;
       }),
       generation: prevState.generation + 1
-    }));
+    }), this.drawGeneration);
 
     requestAnimationFrame(this.setNextGeneration);
+  }
+
+  drawGeneration() {
+    const canvas = this.canvas;
+    const ctx = canvas.getContext('2d');
+
+    this.state.board.forEach((cell, i) => {
+      const x = Math.floor(i * 12) % 720;
+      const y = Math.floor(i / 60) * 12;
+
+      if (cell) {
+        ctx.fillStyle = '#009cde';
+        ctx.fillRect(x, y, 12, 12);
+      } else {
+        ctx.fillStyle = '#f7f7f7';
+        ctx.fillRect(x, y, 12, 12);
+      }
+    });
   }
 
   start = () => {
@@ -79,10 +108,11 @@ class App extends Component {
   clear = () => {
     cancelAnimationFrame(this.state.rAF);
     this.setState({
-      board: Array(1980).fill(0),
+      board: [],
       generation: 0,
       rAF: null,
     });
+    this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   reset = () => {
@@ -118,10 +148,12 @@ class App extends Component {
             <Button onClick={this.reset} text="Reset"/>
           </div>
 
-          <Board
-            board={this.state.board}
-            onCellClick={this.toggleCellState}
-          />
+          <canvas
+            ref="canvas"
+            className="board"
+            width="720"
+            height="396">
+          </canvas>
 
           <footer className="footer">
             <p>Learn about Conway&#39;s Game of Life on <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Wikipedia</a>.</p>
@@ -142,16 +174,8 @@ function getNeighbourCount(board, i) {
   let count = 0;
 
   let currRowIndex = Math.floor(i / numCellsRow);
-  let prevRowIndex = currRowIndex - 1;
-  let nextRowIndex = currRowIndex + 1;
-
-  if (prevRowIndex < 0) {
-    prevRowIndex = numRows - 1;
-  }
-
-  if (nextRowIndex === numRows) {
-    nextRowIndex = 0;
-  }
+  let prevRowIndex = (currRowIndex - 1 + numRows) % numRows;
+  let nextRowIndex = (currRowIndex + 1 + numRows) % numRows;
 
   function getRow(rowIndex) {
     return board.slice(rowIndex * numCellsRow, (rowIndex * numCellsRow) + numCellsRow);
@@ -165,7 +189,7 @@ function getNeighbourCount(board, i) {
   const isRightSide = i % numCellsRow === numCellsRow - 1;
 
   let leftIndex = (i % numCellsRow) - 1;
-  let rightIndex = (i % numCellsRow) + 1;
+  let rightIndex = (i % numCellsRow) + 1; // (i + 1) % 60 + Math.floor(i - i % 60)
 
   if (isLeftSide) {
     leftIndex = numCellsRow - 1;
