@@ -106,7 +106,7 @@ class App extends Component {
   clear = () => {
     cancelAnimationFrame(this.state.rAF);
     this.setState({
-      board: [],
+      board: Array(33).fill(Array(60).fill(0)),
       generation: 0,
       rAF: null,
     });
@@ -118,15 +118,29 @@ class App extends Component {
     this.setBoard();
   }
 
-  toggleCellState = (i) => {
-    this.setState((prevState) => ({
-      board: prevState.board.map((cell, cellIndex) => {
-        if (cellIndex === i) {
-          return cell ? 0 : 1;
+  toggleCellState = (e) => {
+    e.persist();
+
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.x;
+    const y = e.clientY - rect.y;
+
+    const cellIndex = Math.floor(x / 12);
+    const rowIndex = Math.floor(y / 12);
+
+    this.setState({
+      board: this.state.board.map((row, i) => {
+        if (i === rowIndex) {
+          return row.map((cell, j) => {
+            if (j === cellIndex) {
+              return cell ? 0 : 1;
+            }
+            return cell;
+          })
         }
-        return cell;
+        return row;
       })
-    }));
+    }, this.drawGeneration);
   }
 
   render() {
@@ -147,6 +161,7 @@ class App extends Component {
           </div>
 
           <canvas
+            onClick={e => this.toggleCellState(e)}
             ref="canvas"
             className="board"
             width="720"
