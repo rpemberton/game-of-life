@@ -13,6 +13,7 @@ class App extends Component {
 
     this.numCellsInRow = 60;
     this.numRows = 33;
+    this.cellWidthPx = 12;
 
     this.canvas = null;
     this.ctx = null;
@@ -74,10 +75,10 @@ class App extends Component {
     this.state.board.forEach((row, rowIndex) => {
       row.forEach((cell, cellIndex) => {
         if (cell) {
-          const x = Math.floor(cellIndex * 12);
-          const y = Math.floor(rowIndex * 12);
+          const x = Math.floor(cellIndex * this.cellWidthPx);
+          const y = Math.floor(rowIndex * this.cellWidthPx);
           ctx.fillStyle = '#009cde';
-          ctx.fillRect(x, y, 12, 12);
+          ctx.fillRect(x, y, this.cellWidthPx, this.cellWidthPx);
         }
       });
     });
@@ -126,8 +127,8 @@ class App extends Component {
     const x = e.clientX - rect.x;
     const y = e.clientY - rect.y;
 
-    const cellIndex = Math.floor(x / 12);
-    const rowIndex = Math.floor(y / 12);
+    const cellIndex = Math.floor(x / this.cellWidthPx);
+    const rowIndex = Math.floor(y / this.cellWidthPx);
 
     this.setState({
       board: this.state.board.map((row, i) => {
