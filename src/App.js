@@ -13,24 +13,30 @@ class App extends Component {
 
     this.numCellsInRow = 60;
     this.numRows = 33;
+
+    this.canvas = null;
+    this.ctx = null;
   }
 
   componentDidMount() {
-    this.setBoard();
-    this.start();
-  }
-
-  setBoard() {
     const canvas = this.refs.canvas;
-    this.canvas = canvas;
+    const ctx = canvas.getContext('2d');
 
     // Make canvas look good on retina displays
     canvas.width = 1440;
     canvas.height = 792;
     canvas.style.width = '720px';
     canvas.style.height = '396px';
-    canvas.getContext('2d').scale(2,2);
+    ctx.scale(2,2);
 
+    this.canvas = canvas;
+    this.ctx = ctx;
+
+    this.setBoard();
+    this.start();
+  }
+
+  setBoard() {
     const board = [];
 
     for (let i = 0; i < this.numRows; i++) {
@@ -62,18 +68,15 @@ class App extends Component {
 
   drawGeneration() {
     const canvas = this.canvas;
-    const ctx = canvas.getContext('2d');
+    const ctx = this.ctx;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     this.state.board.forEach((row, rowIndex) => {
       row.forEach((cell, cellIndex) => {
-        const x = Math.floor(cellIndex * 12);
-        const y = Math.floor(rowIndex * 12);
-
         if (cell) {
+          const x = Math.floor(cellIndex * 12);
+          const y = Math.floor(rowIndex * 12);
           ctx.fillStyle = '#009cde';
-          ctx.fillRect(x, y, 12, 12);
-        } else {
-          ctx.fillStyle = '#f7f7f7';
           ctx.fillRect(x, y, 12, 12);
         }
       });
@@ -105,11 +108,10 @@ class App extends Component {
   clear = () => {
     cancelAnimationFrame(this.state.rAF);
     this.setState({
-      board: Array(33).fill(Array(60).fill(0)),
+      board: Array(this.numRows).fill(Array(this.numCellsInRow).fill(0)),
       generation: 0,
       rAF: null,
     }, this.drawGeneration);
-    this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   reset = () => {
