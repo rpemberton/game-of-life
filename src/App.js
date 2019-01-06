@@ -15,22 +15,19 @@ class App extends Component {
     this.numRows = 33;
     this.cellWidthPx = 12;
 
-    this.canvas = null;
+    this.canvas = React.createRef();
     this.ctx = null;
   }
 
   componentDidMount() {
-    const canvas = this.refs.canvas;
-    const ctx = canvas.getContext('2d');
-
     // Make canvas look good on retina displays
-    canvas.width = 1440;
-    canvas.height = 792;
-    canvas.style.width = '720px';
-    canvas.style.height = '396px';
-    ctx.scale(2,2);
+    this.canvas.current.width = 1440;
+    this.canvas.current.height = 792;
+    this.canvas.current.style.width = '720px';
+    this.canvas.current.style.height = '396px';
 
-    this.canvas = canvas;
+    const ctx = this.canvas.current.getContext('2d');
+    ctx.scale(2,2);
     this.ctx = ctx;
 
     this.setBoard();
@@ -68,7 +65,7 @@ class App extends Component {
   }
 
   drawGeneration() {
-    const canvas = this.canvas;
+    const canvas = this.canvas.current;
     const ctx = this.ctx;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -164,7 +161,7 @@ class App extends Component {
 
           <canvas
             onClick={e => this.toggleCellState(e)}
-            ref="canvas"
+            ref={this.canvas}
             className="board"
             width="720"
             height="396">
