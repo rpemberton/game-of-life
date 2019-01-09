@@ -152,11 +152,11 @@ class App extends Component {
           <div>
             {
               this.state.rAF
-                ? <Button onClick={this.pause} text="Pause"/>
-                : <Button onClick={this.start} text={this.state.generation ? 'Resume' : 'Start'}/>
+                ? <Button onClick={this.pause}>Pause</Button>
+                : <Button onClick={this.start}>{this.state.generation ? 'Resume' : 'Start'}</Button>
             }
-            <Button onClick={this.clear} text="Clear"/>
-            <Button onClick={this.reset} text="Reset"/>
+            <Button onClick={this.clear}>Clear</Button>
+            <Button onClick={this.reset}>Reset</Button>
           </div>
 
           <canvas
@@ -168,7 +168,9 @@ class App extends Component {
           </canvas>
 
           <footer className="footer">
-            <p>Learn about Conway&#39;s Game of Life on <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Wikipedia</a>.</p>
+            <p>
+              Learn about Conway&#39;s Game of Life on <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Wikipedia</a>.
+            </p>
           </footer>
         </div>
       </div>
